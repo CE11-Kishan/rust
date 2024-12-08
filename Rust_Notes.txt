@@ -1,0 +1,14 @@
+export PATH='$PATH:C:/Users/Kishan/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin'
+
+
+Two types of project
+    - Binary  : End user application         
+    - Library : dll/exe file for reusability of code
+
+cargo init        : Start Project
+cargo init --lib  : Start Library
+
+Write variable/function in snake_case
+
+signed number: i32 , i64
+unsigned number: u32 , u64
