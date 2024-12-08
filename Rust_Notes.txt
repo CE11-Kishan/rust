@@ -12,3 +12,6 @@ Write variable/function in snake_case
 
 signed number: i32 , i64
 unsigned number: u32 , u64
+
+By default variables are Immutable/constant
+To make mutable varibale use "mut" keyword
