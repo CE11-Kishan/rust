@@ -1,13 +1,52 @@
+use std::fs::read_to_string;
+use chrono::{Local, Utc};
 
 //Entry point of our application
 fn main() {
-    // Since println!() has !, Its a macro not function 
+    // Since println!() has !, Its a macro not function
     println!("Hello, world!");
     println!("{}", is_even(20));
     println!("{}", fib(4));
 
     let name = String::from("Kishan");
     println!("The length of string is {}", get_str_len(name));
+
+    let user = User {
+        username: String::from("CE11-Kishan"),
+        email: String::from("Kishan@mgithub.com"),
+        sign_in_count: 1,
+        active: true,
+    };
+
+    println!("The user is {}", user.username);
+
+    let rect = Rect {
+        width: 10,
+        height: 20,
+    };
+
+    println!("The area of rectangle is {}", rect.area());
+
+    println!("Without self parameter function behave as static method {}", Rect::debug());
+
+    let direction = Direction::SOUTH;
+    move_direction_to_north(direction);
+    println!("The direction has changed to north");
+
+    let rect = Shape::Rectangle(10.0, 2.0);
+    println!("Area of rectangel is {}", calculate_area(rect));
+
+    let index = find_first_a(String::from("Kishan"));
+    match index {
+        Some(value) => println!("Index is {}", value),
+        None => println!("No 'a' found")
+    }
+
+    read_file();
+
+    print_current_time();
+
+    print_local_current_time();
 }
 
 //Fucntion to check even number
@@ -43,6 +82,94 @@ fn fib(num: u32) -> u32 {
 }
 
 //Function to get string length
-fn get_str_len(str: String) -> usize{
-    str.chars().count()  //Implicit return
+fn get_str_len(str: String) -> usize {
+    str.chars().count() //Implicit return
+}
+
+//Struct
+struct User {
+    username: String,
+    email: String,
+    sign_in_count: u64,
+    active: bool,
+}
+
+struct Rect {
+    width: u32,
+    height: u32,
+}
+
+//Implement struct
+impl Rect {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    fn perimeter(&self) -> u32 {
+        2 * (self.width + self.height)
+    }
+
+    fn debug() -> i32 {
+        return 1;
+    }
+}
+
+//Enum
+enum Direction {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
+}
+
+fn move_direction_to_north(direction: Direction) -> Direction {
+    Direction::NORTH
+}
+
+//Enum with values
+enum Shape {
+    Rectangle(f64, f64),
+    Circle(f64)
+}
+
+fn calculate_area(shape: Shape) -> f64 {
+    //Pattern matching syntax
+    match shape {
+        Shape::Rectangle(width, height) => width * height,
+        Shape::Circle(radius) => 3.14 * radius * radius
+    }
+}
+
+// Option Enum
+//Function to find first occurenece of char
+fn find_first_a(str: String) -> Option<i32> {
+    for (index, char) in str.chars().enumerate() {
+        if char == 'a' {
+            return Some(index as i32);
+        }
+    }
+
+    return None;
+}
+
+// Result Enum
+//Function to read content of file
+fn read_file() {
+    let content = read_to_string("Rust_Notes.txt");
+    
+    match content {
+        Ok(data) => println!("{}", data),
+        Err(error) => println!("Error: {}", error)
+    }
+}
+
+// Use chrono carate
+fn print_current_time() {
+    let date = Utc::now();
+    println!("The universal time is {}", date);
+}
+
+fn print_local_current_time() {
+    let date = Local::now();
+    println!("The current local time is {}", date);
 }

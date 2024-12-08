@@ -15,3 +15,32 @@ unsigned number: u32 , u64
 
 By default variables are Immutable/constant
 To make mutable varibale use "mut" keyword
+
+// Struct 
+    It lets you structure data together
+
+//"&self" argument : similar to "this" in javascript
+
+//Enum
+   It lets you enumerate over various types of a value
+
+//Enum with values 
+    Provide associated values to enums
+
+//Rust Enum: Options/Result
+    [Null pointer, error handling] done via enums in rust
+    Option : It lets you return either "Some" value or "None" value
+    Result : It lets you return either "OK" value or "Err" value
+ 
+    pub enum Option<T> {
+        None,
+        Some(T)
+    }
+
+
+// Package management
+    You can add an external crate to your project by running 
+     - cargo add crate_name
+     - npm install rust
+
+
