@@ -173,3 +173,17 @@ fn print_local_current_time() {
     let date = Local::now();
     println!("The current local time is {}", date);
 }
+
+
+// Understand Memory Management
+fn create_string() {
+    // Here the memor is created in heap
+    // Here the owner of s variable is in block scope
+    // As ownership goes out of scope then the memory is deallocated automatically
+    // Unlike Garbage collector it doesnt need to run in background to deallocate memory
+    let s: String = String::from("Kishan...");
+
+    println!("The string is {}", s);
+}
+
+//Panic!()

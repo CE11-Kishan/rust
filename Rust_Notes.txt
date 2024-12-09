@@ -13,8 +13,9 @@ Write variable/function in snake_case
 signed number: i32 , i64
 unsigned number: u32 , u64
 
-By default variables are Immutable/constant
-To make mutable varibale use "mut" keyword
+// Mutability
+    By default variables are Immutable/constant
+    To make mutable varibale use "mut" keyword
 
 // Struct 
     It lets you structure data together
@@ -37,6 +38,11 @@ To make mutable varibale use "mut" keyword
         Some(T)
     }
 
+    pub enum Result<T,E> {
+        Ok(T),
+        Err(E)
+    }
+
 
 // Package management
     You can add an external crate to your project by running 
@@ -44,3 +50,95 @@ To make mutable varibale use "mut" keyword
      - npm install rust
 
 
+// Memory management
+    #Stack
+        -> Static, Allocated at compile time
+        -> Smaller in size
+        -> Faster
+        -> Used for samll, fixed size variables and function call information
+            - Numbers : i32, u64, f32
+            - Booleans : true , false
+            - Fixed sized arrays : [i32; 4]
+            - Structs : { x:i32, y:i32 }
+            - References (later)
+    
+    #Heap
+        -> Dynamic, Allocated at run time
+        -> Much larger in size
+        -> Slower due to dynamic allocation and deallocation
+        -> Used for Dynamic and large data structure 
+            - String, Vector, HashMap, Large Arrays/Structs that cant fit in the stack
+
+    # Size of stack frame [function memory in stack] needs to fixed but the size of string can changed hence string is stored in Heap and its address in stack
+
+    => Speciality in Rust Memory management
+     
+     1] Garbage collector
+        -> Written by smart people
+        -> Usually no dangling pointer/memory issue
+        -> You cant do manual memory management
+        -> Exa: Java, javascript
+
+    2] Manual
+        -> You allocate/deallocate memory
+        -> Can lead to dangling piniter/memory issue
+        -> Exa: C
+
+    3] The Rust way
+        -> Rust has its own ownership model for MM
+        -> Makes it extermely safe to memory errors
+        -> Ownership + Moving + Borrowing + References
+
+    => Ownership rule
+        - Each value in Rust has an owner
+        - There can only be one owner at time ( Which prevent double free problem)
+        - When the owner goes out of scope, the value will be dropped
+
+    => Moving 
+        - The ownership of value can be transfered
+        - Example
+            let a = String::from("Kishan")
+            let b = a;
+            println("{}", a) // This will give error since a's ownership is moved to b variable
+            println("{}", b) // This is coorect
+
+            a = b // This moves back the owenership to a variable
+            println("{}", a) // This is correct
+
+    => Borrowing
+        - Lend the varibale of to perform action on that varibale by passing Reference
+        - Example
+            let a = String::from("Kishan")
+            do_something(a1: &a)
+            println("{}", a)
+
+            let b = String::from("Yoo")
+            do_something(b1: &mut b)
+            println("{}", b)
+
+            fn do_something(a1: &String) {
+                // This function has borrowed a's value
+                println!("{}", a1)
+            }
+
+            fn change_something(b1: &mut String) {
+                // Now I can change the string
+                b1.push_str(string: "Boy")                
+            }
+    
+    => References
+        - At any given time, you can have either one mutable reference or any number of immutable
+        - Example
+            fn main() {
+                let mut s1 = String::from("Kishan");
+                let s2 = &mut s1;  // Mutable Reference 
+                let s3 = &s1;      // This is incorrect as above refrence is mutable , then reference need to mutable          
+                println!("String is {}, {}, {}", s1, s2, s3);
+            }
+
+            
+
+
+
+    
+ 
