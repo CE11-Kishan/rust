@@ -137,8 +137,15 @@ unsigned number: u32 , u64
             }
 
             
+// Collection
+    Rust's standard library includes a number of very useful data structure called collections.
+    Most other data types represent one specific value, but collections can contain multiple values.
+    The data these collections point to is stored on the heap.
 
-
+    => Vector
+        - It allows you to store more than one value in single data structure that puts all the value 
+          next to each other in memory.
+          
 
     
  

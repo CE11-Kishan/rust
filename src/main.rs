@@ -47,6 +47,22 @@ fn main() {
     print_current_time();
 
     print_local_current_time();
+
+
+    //Vector
+    let num = vec![1,2,3];  // Intialize using macro
+    let even_num = get_even_numbers(num);
+    println!("Even numbers are {:?}", even_num);
+
+    let mut numbers = Vec::new();
+    numbers.push(1);
+    numbers.push(2);
+    numbers.push(3);
+
+    get_even_number_inplace(&mut numbers);
+    println!("Even numbers are {:?}", numbers);
+
+
 }
 
 //Fucntion to check even number
@@ -177,7 +193,7 @@ fn print_local_current_time() {
 
 // Understand Memory Management
 fn create_string() {
-    // Here the memor is created in heap
+    // Here the memory is created in heap
     // Here the owner of s variable is in block scope
     // As ownership goes out of scope then the memory is deallocated automatically
     // Unlike Garbage collector it doesnt need to run in background to deallocate memory
@@ -186,4 +202,27 @@ fn create_string() {
     println!("The string is {}", s);
 }
 
-//Panic!()
+// Vector
+// Function that takes a vector and return a vector with even values
+fn get_even_numbers(numbers: Vec<i32>) -> Vec<i32> {
+    let mut even_numbers: Vec<i32> = Vec::new();
+
+    for num in numbers {
+        if num % 2 == 0 {
+            even_numbers.push(num);
+        }
+    }
+
+    return even_numbers;
+}
+
+fn get_even_number_inplace(numbers: &mut Vec<i32>) {
+    let mut i = 0;
+    while i < numbers.len() {
+        if numbers[i] % 2 != 0 {
+            numbers.remove(i);
+        }
+
+        i += 1;
+    }
+}
