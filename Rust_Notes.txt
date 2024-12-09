@@ -145,7 +145,9 @@ unsigned number: u32 , u64
     => Vector
         - It allows you to store more than one value in single data structure that puts all the value 
           next to each other in memory.
-          
 
+    => HashMap
+        - It stores a key value pair in rust.
+        - Common method : insert, get, remove, clear
     
  
