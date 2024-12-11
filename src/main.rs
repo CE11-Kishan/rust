@@ -1,4 +1,4 @@
-use std::fs::read_to_string;
+use std::{collections::HashMap, fs::read_to_string};
 use chrono::{Local, Utc};
 
 //Entry point of our application
@@ -62,6 +62,13 @@ fn main() {
     get_even_number_inplace(&mut numbers);
     println!("Even numbers are {:?}", numbers);
 
+
+    // Hashmap
+    let pairs = vec![(String::from("a"), 1), (String::from("b"), 2), (String::from("a"), 3)];
+    let map = group_value_by_key(pairs);
+    println!("Map is {:?}", map);
+
+    do_iterator_op();
 
 }
 
@@ -225,4 +232,24 @@ fn get_even_number_inplace(numbers: &mut Vec<i32>) {
 
         i += 1;
     }
+}
+
+
+// HashMap
+// Function which takes vector of tuple and return HashMap where the keys are the unique keys from the input tuples and the values are vector of all corresponding vlue associated with each key
+fn group_value_by_key(pairs: Vec<(String, i32)>) -> HashMap<String, i32> {
+    let mut map: HashMap<String, i32> = HashMap::new();
+    for (key, value) in pairs {
+        map.insert(key, value);
+    }
+    return map;
+}
+
+// Iterator
+// Write the logic to first filter all odd values then double each value and create a new vector
+fn do_iterator_op() {
+    let nums : Vec<i32> = vec![1,2,3,4,5,6];
+    let iter = nums.iter().filter(|x| *x % 2 == 0).map(|x| x*2);
+    let num_vector: Vec<i32> = iter.collect();
+    println!("{:?}", num_vector)
 }

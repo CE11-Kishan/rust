@@ -106,7 +106,7 @@ unsigned number: u32 , u64
             println("{}", a) // This is correct
 
     => Borrowing
-        - Lend the varibale of to perform action on that varibale by passing Reference
+        - Lend the varibale to perform action on that varibale by passing Reference
         - Example
             let a = String::from("Kishan")
             do_something(a1: &a)
@@ -151,3 +151,104 @@ unsigned number: u32 , u64
         - Common method : insert, get, remove, clear
     
  
+// Rust Iterators
+    An iterator in Rust is responsible for creating a sequence of values and allows us to iterate over each
+    item of the sequence. It is primarily used for looping and we can only loop over iterators in Rust.
+    In Rust, iterators are lazy, meaning they have no effect until you call methods that consume the iterator to use it up. 
+
+    1] Iterating using for loop
+            let nums = vec![1, 2, 3];
+
+            for val in nums {
+                println!("Got: {val}");
+            }
+    
+    2] Iterating after creating an Iterator
+            - Using the iter() method on a collection will borrow (reference) each element 
+              of the collection in each iteration. We can't mutate varibale since we have immutable reference.
+
+            - Example  
+                let nums = vec![1, 2, 3];
+
+                let iter = nums.iter();
+
+                for val in iter {
+                    println!("Got: {val}");
+                }
+
+    3] Iterating using .next()
+            - Using the iter() method on a collection will borrow (reference) each element 
+              of the collection in each iteration. We can't mutate varibale since we have immutable reference.
+              Here iterator is mutable but inner elements (value) is still immutable.
+
+            - Example  
+                let nums = vec![1, 2, 3];
+
+                let mut iter = nums.iter();
+
+                while Some(value) = iter.next() {
+                    println!("Got: {val}");
+                }
+
+    4] Iterating Using Mutable Iterator (iter_mut())
+            - Using the iter_mut() method on a collection will mutably borrow each element 
+              of the collection in each iteration. It means we can modify the collection in place.
+
+            - Example  
+                let nums = vec![1, 2, 3];
+
+                let iter = nums.iter_mut();
+
+                for val in iter {
+                    *val = *val + 2;
+                }
+                println!("Add two in each element: {:?}", nums);
+
+    5] Iterating Using into_iter
+                - The IntoIterator trait is used to convert a collection into an iterator that takes ownership of
+                  the collection. Useful when
+                        1. You no longer need the original collection
+                        2. When you need to squeeze performance benets by transferring ownership (avoiding references)
+                - The for-loop syntax when applied directly on the collection uses into_iter under the hood
+
+                - Example  
+                    let nums = vec![1, 2, 3];
+
+                    let iter = nums.into_iter();
+
+                    for val in iter {
+                        println!("Got: {val}");
+                    }
+
+    => Iterators : Which to chose?
+        Iter  - If you want IMMUTABLE references to the inner variables and don’t want to transfer ownership
+        IterMut - If you want MUTABLE references to the inner variables and don’t want to transfer ownership
+        IterInto - If you want to move the variable into the iterator and don’t want to use it afterwards
+    
+    => Type of Iterators
+        - Consuming Adapter : Methods that call "next" are called consuming adaptors, because calling them uses up the iterator.
+                              One example is the sum method, which takes ownership of the iterator and iterates through the items
+                              by repeatedly calling next, thus consuming the iterator. 
+
+                                fn iterator_sum() {
+                                    let v1 = vec![1, 2, 3];
+
+                                    let v1_iter = v1.iter();
+
+                                    let total: i32 = v1_iter.sum();
+
+                                    assert_eq!(total, 6);
+                                }
+
+        - Producing Adapter : Iterator adapters are used to transform it into another kind of iterator by altering its behavior. 
+                              For example, let's take a look at the map() adapter.
+
+                                let numbers = vec![1, 2, 3];
+                                numbers.iter().map(|i| i + 1);
+                                numbers.iter().map(|i| i + 1).collect();
+
+                                Here, the map() method takes a closure to call on each item on the vector numbers.
+                                However, we will have to use the collect() method on the map() adapter to collect the result. 
+                                This is because iterator adapters do not produce the result directly (lazy) without calling the collect() method.
+                                This will return a vector containing each item from the original vector incremented by 1.
+
