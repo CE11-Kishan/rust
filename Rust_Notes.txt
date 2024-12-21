@@ -252,3 +252,198 @@ unsigned number: u32 , u64
                                 This is because iterator adapters do not produce the result directly (lazy) without calling the collect() method.
                                 This will return a vector containing each item from the original vector incremented by 1.
 
+// String vs Slices in Rust
+String: A growable, mutable, owned string type that can be modified or destroyed. It is stored on the heap and has a pointer, a length, and a capacity.
+Slices (&str): An immutable reference to a fixed-length sequence of UTF-8 bytes somewhere in memory. It does not own the data it points to, but only borrows it for a certain lifetime.
+Key differences:
+
+Ownership: String owns the data it represents, while slices borrow the data from another source.
+Mutability: String is mutable, while slices are immutable.
+Size: String can dynamically grow or shrink as needed, while slices have a fixed size.
+Use cases:
+
+Use String when you need to own and modify a string, such as when building a string at runtime or passing it to another thread.
+Use &str when you need a read-only view of a string, such as when working with string literals or slicing a String.
+Example:
+
+let mut s = String::from("hello"); // owned String
+let hello = &s[0..5]; // slice of the String
+println!("{}", hello); // prints "hello"
+
+Omit Indexes of a Rust Slice
+1. Omitting the Start Index of a Slice
+
+fn main() {
+    let numbers = [1, 2, 3, 4, 5];
+
+    // omit the start index
+    let slice = &numbers[..3];
+
+    println!("array = {:?}", numbers);
+    println!("slice = {:?}", slice);
+}
+
+Output
+
+array = [1, 2, 3, 4, 5]
+slice = [1, 2, 3]
+
+2. Omitting the End Index of a Slice
+
+fn main() {
+    let numbers = [1, 2, 3, 4, 5];
+
+    // omit the end index
+    let slice = &numbers[2..];
+
+    println!("array = {:?}", numbers);
+    println!("slice = {:?}", slice);
+}
+
+Output
+
+array = [1, 2, 3, 4, 5]
+slice = [3, 4, 5]
+
+3. Omitting both Start and End Index of a Slice
+
+fn main() {
+    let numbers = [1, 2, 3, 4, 5];
+    
+    // omit the start index and the end index
+    // reference the whole array
+    let slice = &numbers[..];
+
+    println!("array = {:?}", numbers);
+    println!("slice = {:?}", slice);
+}
+
+Output
+
+array = [1, 2, 3, 4, 5]
+slice = [1, 2, 3, 4, 5]
+
+
+Mutable Slice in Rust
+We can create a mutable slice by using the &mut keyword.
+
+let numbers = [1, 2, 3, 4, 5];
+let slice = &mut numbers[1..4];
+Once the slice is marked as mutable, we can change values inside the slice. Let's see an example,
+
+fn main() {
+    // mutable array
+    let mut colors = ["red", "green", "yellow", "white"];
+    
+    println!("array = {:?}", colors);
+
+    // mutable slice
+    let sliced_colors = &mut colors[1..3];
+    
+    println!("original slice = {:?}", sliced_colors);
+
+    // change the value of the original slice at the first index
+    sliced_colors[1] = "purple";
+
+    println!("changed slice = {:?}", sliced_colors);
+}
+
+Output
+
+array = ["red", "green", "yellow", "white"]
+original slice = ["green", "yellow"]
+changed slice = ["green", "purple"]
+
+
+//Rust Generics
+Generics allows us to write code that is flexible and can be reused with different types of data, 
+without having to write separate implementations for each type. It helps us write code that can 
+handle values of any type in a type-safe and efficient way.
+
+With the help of generics, we can define placeholder types for our methods, functions, structs, enums and traits.
+
+Note:
+
+Generics or generic types use a single character like K, V, T, U to distinguish from actual concrete types like String, &str, i32.
+As a convention,
+T, U are used for arbitrary types
+K, V are used for key-value types
+E is used for error type
+
+use std::collections::HashMap;
+
+fn main() {
+    // Create a HashMap with types i32 and &str
+    let mut numbers: HashMap<i32, &str> = HashMap::new();
+
+    // Insert values to numbers HashMap
+    numbers.insert(1, "One");
+    numbers.insert(2, "Two");
+
+    println!("Numbers: {:?}", numbers);
+    
+    // Create a HashMap with types &str and &str   
+    let mut language_codes: HashMap<&str, &str> = HashMap::new();
+
+    // Insert values to language_codes HashMap
+    language_codes.insert("EN", "English");
+    language_codes.insert("NE", "Nepali");
+    
+    println!("Language Codes: {:?}", language_codes);
+}
+
+Output
+
+Numbers: {1: "One", 2: "Two"}
+Language Codes: {"EN": "English", "NE": "Nepali"}
+
+
+// Rust Trait
+A Rust trait defines shared functionality for multiple types.
+Rust traits promote type-safety, prevent errors at compile 
+time, and act like interfaces in other languages with some distinctions.
+
+// Trait bound syntax
+The impl Trait syntax works for straightforward cases but is actually syntax sugar
+for a longer form known as a trait bound; it looks like this:
+
+
+pub fn notify<T: Summary>(item: &T) {
+    println!("Breaking news! {}", item.summarize());
+}
+
+We can also specify more than one trait bound. Say we wanted notify to 
+use display formatting as well as summarize on item: we specify in the notify 
+definition that item must implement both Display and Summary. We can do so 
+using the + syntax:
+
+pub fn notify(item: &(impl Summary + Display)) {}
+
+The + syntax is also valid with trait bounds on generic types:
+pub fn notify<T: Summary + Display>(item: &T) {}
+
+With the two trait bounds specified, the body of notify can call summarize and use {} to format item.
+
+
+// Rust Macro
+A macro in Rust is a piece of code that generates another piece of code.
+Macros generate code based on input, simplify repetitive patterns, and make code more concise.
+Rust macro simply allows us to write code that writes more code which is also known as meta programming. Macros are used extensively in Rust.
+Some of the popular Rust macros are println!, vec! and panic!.
+Link : https://www.programiz.com/rust/macro
+
+
+// Lifetime
+ - Link : https://www.reddit.com/r/rust/comments/1ck2716/new_to_rust_confused_by_lifetimes/?rdt=36080
+
+ Lifetime Annotations in Function Signatures 
+    - To use lifetime annotations in function signatures, we need to declare the generic lifetime parameters inside angle brackets between the function name 
+    and the parameter list, just as we did with generic type parameters. 
+    - We want the signature to express the following constraint: the returned reference will be valid as long as both the parameters are valid. 
+    This is the relationship between lifetimes of the parameters and the return value. We'll name the lifetime a and then add it to each reference.
+
+
+// Multithreading
+ Link: https://www.programiz.com/rust/thread
+
+ 

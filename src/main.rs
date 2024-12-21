@@ -70,6 +70,17 @@ fn main() {
 
     do_iterator_op();
 
+    apply_iterator_on_hashmap();
+
+
+    //Slices
+    let intro = String::from("Hey there, My name is Kishan");
+    let first_word = first_word(&intro);
+    println!("First word is {}", first_word);
+
+    //Lifetime
+    lifetime_issue_describer();
+
 }
 
 //Fucntion to check even number
@@ -252,4 +263,115 @@ fn do_iterator_op() {
     let iter = nums.iter().filter(|x| *x % 2 == 0).map(|x| x*2);
     let num_vector: Vec<i32> = iter.collect();
     println!("{:?}", num_vector)
+}
+
+// Funtion to apply iterator on hashmap
+fn apply_iterator_on_hashmap() {
+    let mut scores: HashMap<String, i32> = HashMap::new();
+    scores.insert(String::from("Maths"), 98);
+    scores.insert(String::from("Science"), 96);
+    scores.insert(String::from("Social Science"), 96);
+
+    println!("Now will iterate over hashmap");
+
+    for (key, value) in scores.iter(){
+        println!("{} : {}", key, value);
+    }
+
+    println!("Now will iterate over mutable reference of hashmap");
+
+    for (key, value) in scores.iter_mut(){
+        *value += 1;
+        println!("{} : {}", key, value);
+    }
+}
+
+fn first_word(str: &str) -> &str {
+    let mut space_index = 0;
+    for char in str.chars() {
+        if char == ' ' {
+            break;
+        }
+        space_index += 1;
+    }
+
+    return &str[..space_index];   
+}
+
+//Generic function in rust
+//The PartialOrd trait provides methods for comparing values of a type, 
+// such as < and >. This feature of Rust is called Trait bounds. 
+// If we don't use <T: PartialOrder>, Rust will throw a compile error: error[E0369]: binary operation `<` cannot be applied to type `T`
+fn min<T: PartialOrd>(a: T, b: T) -> T{
+    if a < b {
+        return a;
+    } else {
+        return b;
+    }
+}
+
+
+// Traits
+struct Person{
+    name: String,
+    age: u16
+}
+
+trait Printable{
+    fn print(&self);
+}
+
+trait Run {
+
+    // Default implementation of trait
+    fn run(&self) {
+        println!("Runing");
+    }
+}
+
+impl Printable for Person {
+    fn print(&self) {
+        println!("Name: {}, Age: {}", self.name, self.age);
+    }
+}
+
+//Here it wont throw error because we have default implemnation of Run
+// We can ovveride defaul implemenation
+impl Run for Person{} 
+
+
+// Lifetime
+// Need of Lifetime syntax
+
+//This function gives error : missing lifetime specifier this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `a` or `b`
+// fn longest_string(a: &str, b: &str) -> &str{
+//     if a.len() > b.len() {
+//        return a;
+//     } else {
+//         return b;
+//     }
+// }
+
+fn lifetime_issue_describer(){
+    let longest_str: &str;
+    let str1 = String::from("Small");
+    {
+        let str2 = String::from("Longgggggggger");
+        // longest_str = longest_string(&str1, &str2); // This has borrowed str1 and str2
+        // As str2 will be return from but that is being accessed out of this scope in printing
+        // There we defined new function below that  use lifetime syntax
+        // longest_str = longest(&str1, &str2); // This will give error hereself
+    }
+    // println!("The longest string is {}", longest_str);
+    
+}
+
+
+// The short lifetime is what the return type will have
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
 }
